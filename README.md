@@ -1,8 +1,8 @@
-## Platform Overview
+# Platform Overview
 
 This platform is designed to deploy a secure, highly available, and scalable web app on AWS. It includes a VPC with public and private subnets across multiple AZs, an ALB, EC2 instances in an ASG, an RDS database in private subnets, and supporting AWS services for security, monitoring and storage. 
 
-# What The Platform Does
+## What The Platform Does
 
 - Host a web app accessible over HTTPS.
 - Distribute traffic across multiple AZs for high availability.
@@ -13,7 +13,7 @@ This platform is designed to deploy a secure, highly available, and scalable web
 - Monitor infrastructure and application health
 - Mnanaged via IaC (Terraform)
 
-# Requirements
+## Requirements
 
 High Availability - Multi-AZ deployment for ALB, EC2/ASG, and RDS
 Scalability - Auto Scaling Group with min/max capacity
@@ -24,7 +24,7 @@ Maintainability - Fully defined in Terraform with modular design
 Cost Efficiency - Right-sized instances, autoscaling, and S3 for static content
 Observability - CloudWatch metrics/alerts, ALB access logs
 
-# Getting Started
+## Getting Started
 
 1. Install Terraform >= 1.5
 2. Configure AWS credentials
@@ -33,11 +33,11 @@ Observability - CloudWatch metrics/alerts, ALB access logs
 5. Plan: terraform plan
 6. Apply: terraform apply
 
-# Architectual Diagram
+## Architectual Diagram
 
 ![AWS-Architecture](docs/screenshots/AWS-Architecture.png)
 
-# Notes
+## Notes
 
 - Two AZs used for high availability.
 - ALB placed in public subnets.
