@@ -3,7 +3,6 @@
 *.tfstate
 *.tfstate.*
 *.tfplan
-.terraform.lock.hcl
 
 # Variable files that may contain secrets
 *.tfvars
