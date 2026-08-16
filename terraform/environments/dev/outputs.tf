@@ -71,3 +71,18 @@ output "target_group_arn" {
   description = "ARN of the application target group"
   value       = aws_lb_target_group.app.arn
 }
+
+output "rds_endpoint" {
+  description = "Endpoint of the RDS MySQL database"
+  value       = aws_db_instance.main.address
+}
+
+output "rds_port" {
+  description = "Port used by the RDS MySQL database"
+  value       = aws_db_instance.main.port
+}
+
+output "rds_database_name" {
+  description = "Name of the application database"
+  value       = aws_db_instance.main.db_name
+}
