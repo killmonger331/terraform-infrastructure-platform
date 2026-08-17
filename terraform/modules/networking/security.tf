@@ -3,12 +3,12 @@
 # ---------------------------------------------------------
 
 resource "aws_security_group" "alb" {
-  name        = "terraform-platform-dev-alb-sg"
+  name        = "terraform-platform-${var.environment}-alb-sg"
   description = "Allow HTTP and HTTPS traffic from the internet"
   vpc_id      = aws_vpc.main.id
 
   tags = {
-    Name        = "terraform-platform-dev-alb-sg"
+    Name        = "terraform-platform-${var.environment}-alb-sg"
     Environment = var.environment
     ManagedBy   = "Terraform"
   }
@@ -42,12 +42,12 @@ resource "aws_vpc_security_group_ingress_rule" "alb_https" {
 # ---------------------------------------------------------
 
 resource "aws_security_group" "ec2" {
-  name        = "terraform-platform-dev-ec2-sg"
+  name        = "terraform-platform-${var.environment}-ec2-sg"
   description = "Allow application traffic only from the ALB"
   vpc_id      = aws_vpc.main.id
 
   tags = {
-    Name        = "terraform-platform-dev-ec2-sg"
+    Name        = "terraform-platform-${var.environment}-ec2-sg"
     Environment = var.environment
     ManagedBy   = "Terraform"
   }
@@ -71,12 +71,12 @@ resource "aws_vpc_security_group_ingress_rule" "ec2_from_alb" {
 # ---------------------------------------------------------
 
 resource "aws_security_group" "rds" {
-  name        = "terraform-platform-dev-rds-sg"
+  name        = "terraform-platform-${var.environment}-rds-sg"
   description = "Allow MySQL traffic only from EC2 instances"
   vpc_id      = aws_vpc.main.id
 
   tags = {
-    Name        = "terraform-platform-dev-rds-sg"
+    Name        = "terraform-platform-${var.environment}-rds-sg"
     Environment = var.environment
     ManagedBy   = "Terraform"
   }

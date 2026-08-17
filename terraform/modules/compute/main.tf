@@ -28,7 +28,7 @@ data "aws_ami" "amazon_linux" {
 resource "aws_launch_template" "app" {
   name_prefix   = "terraform-platform-${var.environment}-"
   image_id      = data.aws_ami.amazon_linux.id
-  instance_type = "var.instance_type"
+  instance_type = var.instance_type
 
   vpc_security_group_ids = [
     var.ec2_security_group_id

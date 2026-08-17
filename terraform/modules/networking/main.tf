@@ -17,7 +17,7 @@ resource "aws_vpc" "main" {
 
   tags = {
     Name        = "terraform-platform-${var.environment}-vpc"
-    Environment = "${var.environment}"
+    Environment = var.environment
     ManagedBy   = "Terraform"
   }
 }
