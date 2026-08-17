@@ -1,81 +1,53 @@
-# ---------------------------------------------------------
-# Application Load Balancer
-# ---------------------------------------------------------
-
-resource "aws_lb" "app" {
-  name               = "terraform-platform-dev-alb"
-  internal           = false
-  load_balancer_type = "application"
-
-  security_groups = [
-    aws_security_group.alb.id
-  ]
-
-  subnets = [
-    aws_subnet.public_a.id,
-    aws_subnet.public_b.id
-  ]
-
-  enable_deletion_protection = false
-
-  tags = {
-    Name        = "terraform-platform-dev-alb"
-    Environment = var.environment
-    ManagedBy   = "Terraform"
-  }
+variable "environment" {
+  description = "Deployment environment"
+  type        = string
 }
 
-
-# ---------------------------------------------------------
-# ALB Target Group
-# ---------------------------------------------------------
-
-resource "aws_lb_target_group" "app" {
-  name     = "terraform-platform-dev-tg"
-  port     = 80
-  protocol = "HTTP"
-  vpc_id   = aws_vpc.main.id
-
-  target_type = "instance"
-
-  health_check {
-    enabled             = true
-    path                = "/"
-    protocol            = "HTTP"
-    port                = "traffic-port"
-    healthy_threshold   = 2
-    unhealthy_threshold = 2
-    timeout             = 5
-    interval            = 30
-    matcher             = "200-399"
-  }
-
-  tags = {
-    Name        = "terraform-platform-dev-tg"
-    Environment = var.environment
-    ManagedBy   = "Terraform"
-  }
+variable "vpc_id" {
+  description = "VPC ID used by the target group"
+  type        = string
 }
 
+variable "public_subnet_ids" {
+  description = "Public subnet IDs used by the ALB"
+  type        = list(string)
+}
 
-# ---------------------------------------------------------
-# HTTP Listener
-# ---------------------------------------------------------
+variable "private_app_subnet_ids" {
+  description = "Private application subnet IDs used by the Auto Scaling Group"
+  type        = list(string)
+}
 
-resource "aws_lb_listener" "http" {
-  load_balancer_arn = aws_lb.app.arn
+variable "alb_security_group_id" {
+  description = "Security group ID for the Application Load Balancer"
+  type        = string
+}
 
-  port     = 80
-  protocol = "HTTP"
+variable "ec2_security_group_id" {
+  description = "Security group ID for EC2 instances"
+  type        = string
+}
 
-  default_action {
-    type             = "forward"
-    target_group_arn = aws_lb_target_group.app.arn
-  }
+variable "instance_type" {
+  description = "EC2 instance type"
+  type        = string
+  default     = "t3.micro"
+}
 
-  tags = {
-    Name        = "terraform-platform-dev-http-listener"
-    Environment = var.environment
-    ManagedBy   = "Terraform"
-  }
+variable "min_size" {
+  description = "Minimum Auto Scaling Group size"
+  type        = number
+  default     = 2
+}
+
+variable "desired_capacity" {
+  description = "Desired Auto Scaling Group capacity"
+  type        = number
+  default     = 2
+}
+
+variable "max_size" {
+  description = "Maximum Auto Scaling Group size"
+  type        = number
+  default     = 4
 }

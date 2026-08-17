@@ -38,7 +38,7 @@ module "monitoring" {
   environment = var.environment
   aws_region  = "us-east-1"
 
-  autoscaling_group_name = module.compute.autoscaling_group_name
+  autoscaling_group_name  = module.compute.autoscaling_group_name
   alb_arn_suffix          = module.compute.alb_arn_suffix
   target_group_arn_suffix = module.compute.target_group_arn_suffix
 

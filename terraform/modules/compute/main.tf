@@ -111,7 +111,7 @@ resource "aws_autoscaling_group" "app" {
 
   tag {
     key                 = "Environment"
-    value               = ${var.environment}
+    value               = var.environment
     propagate_at_launch = true
   }
 
