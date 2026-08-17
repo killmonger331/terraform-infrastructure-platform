@@ -20,7 +20,7 @@ resource "aws_lb" "app" {
 
   tags = {
     Name        = "terraform-platform-dev-alb"
-    Environment = "dev"
+    Environment = var.environment
     ManagedBy   = "Terraform"
   }
 }
@@ -52,7 +52,7 @@ resource "aws_lb_target_group" "app" {
 
   tags = {
     Name        = "terraform-platform-dev-tg"
-    Environment = "dev"
+    Environment = var.environment
     ManagedBy   = "Terraform"
   }
 }
@@ -75,7 +75,7 @@ resource "aws_lb_listener" "http" {
 
   tags = {
     Name        = "terraform-platform-dev-http-listener"
-    Environment = "dev"
+    Environment = var.environment
     ManagedBy   = "Terraform"
   }
 }

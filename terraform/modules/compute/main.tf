@@ -65,14 +65,14 @@ resource "aws_launch_template" "app" {
 
     tags = {
       Name        = "terraform-platform-dev-app"
-      Environment = "dev"
+      Environment = var.environment
       ManagedBy   = "Terraform"
     }
   }
 
   tags = {
     Name        = "terraform-platform-dev-launch-template"
-    Environment = "dev"
+    Environment = var.environment
     ManagedBy   = "Terraform"
   }
 }

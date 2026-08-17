@@ -9,7 +9,7 @@ resource "aws_security_group" "alb" {
 
   tags = {
     Name        = "terraform-platform-dev-alb-sg"
-    Environment = "dev"
+    Environment = var.environment
     ManagedBy   = "Terraform"
   }
 }
@@ -48,7 +48,7 @@ resource "aws_security_group" "ec2" {
 
   tags = {
     Name        = "terraform-platform-dev-ec2-sg"
-    Environment = "dev"
+    Environment = var.environment
     ManagedBy   = "Terraform"
   }
 }
@@ -77,7 +77,7 @@ resource "aws_security_group" "rds" {
 
   tags = {
     Name        = "terraform-platform-dev-rds-sg"
-    Environment = "dev"
+    Environment = var.environment
     ManagedBy   = "Terraform"
   }
 }

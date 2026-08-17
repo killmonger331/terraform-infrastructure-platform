@@ -12,7 +12,7 @@ resource "aws_db_subnet_group" "main" {
 
   tags = {
     Name        = "terraform-platform-dev-db-subnet-group"
-    Environment = "dev"
+    Environment = var.environment
     ManagedBy   = "Terraform"
   }
 }
@@ -54,7 +54,7 @@ resource "aws_db_instance" "main" {
 
   tags = {
     Name        = "terraform-platform-dev-db"
-    Environment = "dev"
+    Environment = var.environment
     ManagedBy   = "Terraform"
   }
 }

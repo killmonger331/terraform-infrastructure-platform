@@ -10,6 +10,32 @@
 # Private DB:  10.0.22.0/24
 
 
+
+
+# first disposable resource, S3 is cheap, easy to verify and easy to destory
+
+#resource "aws_s3_bucket" "terraform_test" {
+#  bucket_prefix = "terraform-platform-test-"
+#  tags = {
+#    Name        = "Terraform Platform Test"
+#    Environment = "var.environment"
+#    ManagedBy   = "Terraform"
+# }
+#}
+
+resource "aws_vpc" "main" {
+  cidr_block           = "10.0.0.0/16"
+  enable_dns_support   = true
+  enable_dns_hostnames = true
+
+  tags = {
+    Name        = "terraform-platform-dev-vpc"
+    Envrionment = "dev"
+    ManagedBy   = "Terraform"
+  }
+}
+
+
 # ---------------------------------------------------------
 # Availability Zones
 # ---------------------------------------------------------
@@ -17,7 +43,6 @@
 data "aws_availability_zones" "available" {
   state = "available"
 }
-
 
 # ---------------------------------------------------------
 # Public Subnets
@@ -31,7 +56,7 @@ resource "aws_subnet" "public_a" {
 
   tags = {
     Name        = "terraform-platform-dev-public-a"
-    Environment = "dev"
+    Environment = var.environment
     Type        = "public"
     ManagedBy   = "Terraform"
   }
@@ -45,7 +70,7 @@ resource "aws_subnet" "public_b" {
 
   tags = {
     Name        = "terraform-platform-dev-public-b"
-    Environment = "dev"
+    Environment = var.environment
     Type        = "public"
     ManagedBy   = "Terraform"
   }
@@ -63,7 +88,7 @@ resource "aws_subnet" "private_app_a" {
 
   tags = {
     Name        = "terraform-platform-dev-private-app-a"
-    Environment = "dev"
+    Environment = var.environment
     Type        = "private-app"
     ManagedBy   = "Terraform"
   }
@@ -76,7 +101,7 @@ resource "aws_subnet" "private_app_b" {
 
   tags = {
     Name        = "terraform-platform-dev-private-app-b"
-    Environment = "dev"
+    Environment = var.environment
     Type        = "private-app"
     ManagedBy   = "Terraform"
   }
@@ -94,7 +119,7 @@ resource "aws_subnet" "private_db_a" {
 
   tags = {
     Name        = "terraform-platform-dev-private-db-a"
-    Environment = "dev"
+    Environment = var.environment
     Type        = "private-db"
     ManagedBy   = "Terraform"
   }
@@ -107,7 +132,7 @@ resource "aws_subnet" "private_db_b" {
 
   tags = {
     Name        = "terraform-platform-dev-private-db-b"
-    Environment = "dev"
+    Environment = var.environment
     Type        = "private-db"
     ManagedBy   = "Terraform"
   }
@@ -123,7 +148,7 @@ resource "aws_internet_gateway" "main" {
 
   tags = {
     Name        = "terraform-platform-dev-igw"
-    Environment = "dev"
+    Environment = var.environment
     ManagedBy   = "Terraform"
   }
 }
@@ -138,7 +163,7 @@ resource "aws_eip" "nat_a" {
 
   tags = {
     Name        = "terraform-platform-dev-nat-eip-a"
-    Environment = "dev"
+    Environment = var.environment
     ManagedBy   = "Terraform"
   }
 }
@@ -148,7 +173,7 @@ resource "aws_eip" "nat_b" {
 
   tags = {
     Name        = "terraform-platform-dev-nat-eip-b"
-    Environment = "dev"
+    Environment = var.environment
     ManagedBy   = "Terraform"
   }
 }
@@ -166,7 +191,7 @@ resource "aws_nat_gateway" "a" {
 
   tags = {
     Name        = "terraform-platform-dev-nat-a"
-    Environment = "dev"
+    Environment = var.environment
     ManagedBy   = "Terraform"
   }
 }
@@ -179,7 +204,7 @@ resource "aws_nat_gateway" "b" {
 
   tags = {
     Name        = "terraform-platform-dev-nat-b"
-    Environment = "dev"
+    Environment = var.environment
     ManagedBy   = "Terraform"
   }
 }
@@ -194,7 +219,7 @@ resource "aws_route_table" "public" {
 
   tags = {
     Name        = "terraform-platform-dev-public-rt"
-    Environment = "dev"
+    Environment = var.environment
     ManagedBy   = "Terraform"
   }
 }
@@ -215,7 +240,7 @@ resource "aws_route_table" "private_app_a" {
 
   tags = {
     Name        = "terraform-platform-dev-private-app-a-rt"
-    Environment = "dev"
+    Environment = var.environment
     ManagedBy   = "Terraform"
   }
 }
@@ -225,7 +250,7 @@ resource "aws_route_table" "private_app_b" {
 
   tags = {
     Name        = "terraform-platform-dev-private-app-b-rt"
-    Environment = "dev"
+    Environment = var.environment
     ManagedBy   = "Terraform"
   }
 }
@@ -252,7 +277,7 @@ resource "aws_route_table" "private_db" {
 
   tags = {
     Name        = "terraform-platform-dev-private-db-rt"
-    Environment = "dev"
+    Environment = var.environment
     ManagedBy   = "Terraform"
   }
 }

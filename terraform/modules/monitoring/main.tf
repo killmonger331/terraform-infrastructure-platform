@@ -7,7 +7,7 @@ resource "aws_cloudwatch_metric_alarm" "ec2_high_cpu" {
   alarm_description   = "EC2 Auto Scaling Group average CPU is above 70 percent"
   comparison_operator = "GreaterThanThreshold"
 
-  evaluation_periods = 2
+  evaluation_periods  = 2
   datapoints_to_alarm = 2
 
   metric_name = "CPUUtilization"
@@ -24,7 +24,7 @@ resource "aws_cloudwatch_metric_alarm" "ec2_high_cpu" {
   treat_missing_data = "notBreaching"
 
   tags = {
-    Environment = "dev"
+    Environment = var.environment
     ManagedBy   = "Terraform"
   }
 }
@@ -40,7 +40,7 @@ resource "aws_cloudwatch_metric_alarm" "alb_unhealthy_targets" {
 
   comparison_operator = "GreaterThanOrEqualToThreshold"
 
-  evaluation_periods = 1
+  evaluation_periods  = 1
   datapoints_to_alarm = 1
 
   metric_name = "UnHealthyHostCount"
@@ -58,7 +58,7 @@ resource "aws_cloudwatch_metric_alarm" "alb_unhealthy_targets" {
   treat_missing_data = "notBreaching"
 
   tags = {
-    Environment = "dev"
+    Environment = var.environment
     ManagedBy   = "Terraform"
   }
 }
@@ -74,7 +74,7 @@ resource "aws_cloudwatch_metric_alarm" "alb_high_response_time" {
 
   comparison_operator = "GreaterThanThreshold"
 
-  evaluation_periods = 2
+  evaluation_periods  = 2
   datapoints_to_alarm = 2
 
   metric_name = "TargetResponseTime"
@@ -91,7 +91,7 @@ resource "aws_cloudwatch_metric_alarm" "alb_high_response_time" {
   treat_missing_data = "notBreaching"
 
   tags = {
-    Environment = "dev"
+    Environment = var.environment
     ManagedBy   = "Terraform"
   }
 }
@@ -107,7 +107,7 @@ resource "aws_cloudwatch_metric_alarm" "rds_high_cpu" {
 
   comparison_operator = "GreaterThanThreshold"
 
-  evaluation_periods = 2
+  evaluation_periods  = 2
   datapoints_to_alarm = 2
 
   metric_name = "CPUUtilization"
@@ -124,7 +124,7 @@ resource "aws_cloudwatch_metric_alarm" "rds_high_cpu" {
   treat_missing_data = "notBreaching"
 
   tags = {
-    Environment = "dev"
+    Environment = var.environment
     ManagedBy   = "Terraform"
   }
 }
@@ -156,7 +156,7 @@ resource "aws_cloudwatch_metric_alarm" "rds_low_storage" {
   treat_missing_data = "notBreaching"
 
   tags = {
-    Environment = "dev"
+    Environment = var.environment
     ManagedBy   = "Terraform"
   }
 }
