@@ -3,7 +3,7 @@
 # ---------------------------------------------------------
 
 resource "aws_cloudwatch_metric_alarm" "ec2_high_cpu" {
-  alarm_name          = "terraform-platform-dev-ec2-high-cpu"
+  alarm_name          = "terraform-platform-${var.environment}-ec2-high-cpu"
   alarm_description   = "EC2 Auto Scaling Group average CPU is above 70 percent"
   comparison_operator = "GreaterThanThreshold"
 
@@ -18,7 +18,7 @@ resource "aws_cloudwatch_metric_alarm" "ec2_high_cpu" {
   threshold = 70
 
   dimensions = {
-    AutoScalingGroupName = aws_autoscaling_group.app.name
+    AutoScalingGroupName = var.autoscaling_group_name
   }
 
   treat_missing_data = "notBreaching"
@@ -35,7 +35,7 @@ resource "aws_cloudwatch_metric_alarm" "ec2_high_cpu" {
 # ---------------------------------------------------------
 
 resource "aws_cloudwatch_metric_alarm" "alb_unhealthy_targets" {
-  alarm_name        = "terraform-platform-dev-alb-unhealthy-targets"
+  alarm_name        = "terraform-platform-${var.environment}-alb-unhealthy-targets"
   alarm_description = "ALB has one or more unhealthy EC2 targets"
 
   comparison_operator = "GreaterThanOrEqualToThreshold"
@@ -51,8 +51,8 @@ resource "aws_cloudwatch_metric_alarm" "alb_unhealthy_targets" {
   threshold = 1
 
   dimensions = {
-    LoadBalancer = aws_lb.app.arn_suffix
-    TargetGroup  = aws_lb_target_group.app.arn_suffix
+    LoadBalancer = var.alb_arn_suffix
+    TargetGroup  = var.target_group_arn_suffix
   }
 
   treat_missing_data = "notBreaching"
@@ -69,7 +69,7 @@ resource "aws_cloudwatch_metric_alarm" "alb_unhealthy_targets" {
 # ---------------------------------------------------------
 
 resource "aws_cloudwatch_metric_alarm" "alb_high_response_time" {
-  alarm_name        = "terraform-platform-dev-alb-high-response-time"
+  alarm_name        = "terraform-platform-${var.environment}-alb-high-response-time"
   alarm_description = "ALB target response time is above 2 seconds"
 
   comparison_operator = "GreaterThanThreshold"
@@ -85,7 +85,7 @@ resource "aws_cloudwatch_metric_alarm" "alb_high_response_time" {
   threshold = 2
 
   dimensions = {
-    LoadBalancer = aws_lb.app.arn_suffix
+    LoadBalancer = var.alb_arn_suffix
   }
 
   treat_missing_data = "notBreaching"
@@ -102,7 +102,7 @@ resource "aws_cloudwatch_metric_alarm" "alb_high_response_time" {
 # ---------------------------------------------------------
 
 resource "aws_cloudwatch_metric_alarm" "rds_high_cpu" {
-  alarm_name        = "terraform-platform-dev-rds-high-cpu"
+  alarm_name        = "terraform-platform-${var.environment}-rds-high-cpu"
   alarm_description = "RDS CPU utilization is above 80 percent"
 
   comparison_operator = "GreaterThanThreshold"
@@ -118,7 +118,7 @@ resource "aws_cloudwatch_metric_alarm" "rds_high_cpu" {
   threshold = 80
 
   dimensions = {
-    DBInstanceIdentifier = aws_db_instance.main.identifier
+    DBInstanceIdentifier = var.db_instance_identifier
   }
 
   treat_missing_data = "notBreaching"
@@ -135,7 +135,7 @@ resource "aws_cloudwatch_metric_alarm" "rds_high_cpu" {
 # ---------------------------------------------------------
 
 resource "aws_cloudwatch_metric_alarm" "rds_low_storage" {
-  alarm_name        = "terraform-platform-dev-rds-low-storage"
+  alarm_name        = "terraform-platform-${var.environment}-rds-low-storage"
   alarm_description = "RDS free storage has fallen below 5 GiB"
 
   comparison_operator = "LessThanThreshold"
@@ -150,7 +150,7 @@ resource "aws_cloudwatch_metric_alarm" "rds_low_storage" {
   threshold = 5368709120
 
   dimensions = {
-    DBInstanceIdentifier = aws_db_instance.main.identifier
+    DBInstanceIdentifier = var.db_instance_identifier
   }
 
   treat_missing_data = "notBreaching"
@@ -185,7 +185,7 @@ resource "aws_cloudwatch_dashboard" "main" {
 
         properties = {
           title  = "EC2 Auto Scaling Group - CPU Utilization"
-          region = "us-east-1"
+          region = var.aws_region
           view   = "timeSeries"
           stat   = "Average"
           period = 300
@@ -195,7 +195,7 @@ resource "aws_cloudwatch_dashboard" "main" {
               "AWS/EC2",
               "CPUUtilization",
               "AutoScalingGroupName",
-              aws_autoscaling_group.app.name
+              var.autoscaling_group_name
             ]
           ]
         }
@@ -214,7 +214,7 @@ resource "aws_cloudwatch_dashboard" "main" {
 
         properties = {
           title  = "ALB - Request Count"
-          region = "us-east-1"
+          region = var.aws_region
           view   = "timeSeries"
           stat   = "Sum"
           period = 60
@@ -224,7 +224,7 @@ resource "aws_cloudwatch_dashboard" "main" {
               "AWS/ApplicationELB",
               "RequestCount",
               "LoadBalancer",
-              aws_lb.app.arn_suffix
+              var.alb_arn_suffix
             ]
           ]
         }
@@ -243,7 +243,7 @@ resource "aws_cloudwatch_dashboard" "main" {
 
         properties = {
           title  = "ALB - Target Health"
-          region = "us-east-1"
+          region = var.aws_region
           view   = "timeSeries"
           period = 60
 
@@ -252,9 +252,9 @@ resource "aws_cloudwatch_dashboard" "main" {
               "AWS/ApplicationELB",
               "HealthyHostCount",
               "TargetGroup",
-              aws_lb_target_group.app.arn_suffix,
+              var.target_group_arn_suffix,
               "LoadBalancer",
-              aws_lb.app.arn_suffix,
+              var.alb_arn_suffix,
               {
                 stat = "Minimum"
               }
@@ -288,7 +288,7 @@ resource "aws_cloudwatch_dashboard" "main" {
 
         properties = {
           title  = "ALB - Target Response Time"
-          region = "us-east-1"
+          region = var.aws_region
           view   = "timeSeries"
           stat   = "Average"
           period = 60
@@ -298,7 +298,7 @@ resource "aws_cloudwatch_dashboard" "main" {
               "AWS/ApplicationELB",
               "TargetResponseTime",
               "LoadBalancer",
-              aws_lb.app.arn_suffix
+              var.alb_arn_suffix
             ]
           ]
         }
@@ -317,7 +317,7 @@ resource "aws_cloudwatch_dashboard" "main" {
 
         properties = {
           title  = "RDS - CPU Utilization"
-          region = "us-east-1"
+          region = var.aws_region
           view   = "timeSeries"
           stat   = "Average"
           period = 300
@@ -327,7 +327,7 @@ resource "aws_cloudwatch_dashboard" "main" {
               "AWS/RDS",
               "CPUUtilization",
               "DBInstanceIdentifier",
-              aws_db_instance.main.identifier
+              var.db_instance_identifier
             ]
           ]
         }
@@ -346,7 +346,7 @@ resource "aws_cloudwatch_dashboard" "main" {
 
         properties = {
           title  = "RDS - Database Connections"
-          region = "us-east-1"
+          region = var.aws_region
           view   = "timeSeries"
           stat   = "Average"
           period = 300
@@ -356,7 +356,7 @@ resource "aws_cloudwatch_dashboard" "main" {
               "AWS/RDS",
               "DatabaseConnections",
               "DBInstanceIdentifier",
-              aws_db_instance.main.identifier
+              var.db_instance_identifier
             ]
           ]
         }

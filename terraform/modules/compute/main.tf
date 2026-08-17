@@ -26,12 +26,12 @@ data "aws_ami" "amazon_linux" {
 # ---------------------------------------------------------
 
 resource "aws_launch_template" "app" {
-  name_prefix   = "terraform-platform-dev-"
+  name_prefix   = "terraform-platform-${var.environment}-"
   image_id      = data.aws_ami.amazon_linux.id
-  instance_type = "t3.micro"
+  instance_type = "var.instance_type"
 
   vpc_security_group_ids = [
-    aws_security_group.ec2.id
+    var.ec2_security_group_id
   ]
 
   user_data = base64encode(<<-EOF
@@ -64,14 +64,14 @@ resource "aws_launch_template" "app" {
     resource_type = "instance"
 
     tags = {
-      Name        = "terraform-platform-dev-app"
+      Name        = "terraform-platform-${var.environment}-app"
       Environment = var.environment
       ManagedBy   = "Terraform"
     }
   }
 
   tags = {
-    Name        = "terraform-platform-dev-launch-template"
+    Name        = "terraform-platform-${var.environment}-launch-template"
     Environment = var.environment
     ManagedBy   = "Terraform"
   }
@@ -83,16 +83,13 @@ resource "aws_launch_template" "app" {
 # ---------------------------------------------------------
 
 resource "aws_autoscaling_group" "app" {
-  name = "terraform-platform-dev-asg"
+  name = "terraform-platform-${var.environment}-asg"
 
-  min_size         = 2
-  desired_capacity = 2
-  max_size         = 4
+  min_size         = var.min_size
+  desired_capacity = var.desired_capacity
+  max_size         = var.max_size
 
-  vpc_zone_identifier = [
-    aws_subnet.private_app_a.id,
-    aws_subnet.private_app_b.id
-  ]
+  vpc_zone_identifier = var.private_app_subnet_ids
 
   target_group_arns = [
     aws_lb_target_group.app.arn
@@ -108,13 +105,13 @@ resource "aws_autoscaling_group" "app" {
 
   tag {
     key                 = "Name"
-    value               = "terraform-platform-dev-app"
+    value               = "terraform-platform-${var.environment}-app"
     propagate_at_launch = true
   }
 
   tag {
     key                 = "Environment"
-    value               = "dev"
+    value               = ${var.environment}
     propagate_at_launch = true
   }
 

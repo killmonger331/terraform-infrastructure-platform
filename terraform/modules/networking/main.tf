@@ -10,31 +10,17 @@
 # Private DB:  10.0.22.0/24
 
 
-
-
-# first disposable resource, S3 is cheap, easy to verify and easy to destory
-
-#resource "aws_s3_bucket" "terraform_test" {
-#  bucket_prefix = "terraform-platform-test-"
-#  tags = {
-#    Name        = "Terraform Platform Test"
-#    Environment = "var.environment"
-#    ManagedBy   = "Terraform"
-# }
-#}
-
 resource "aws_vpc" "main" {
   cidr_block           = "10.0.0.0/16"
   enable_dns_support   = true
   enable_dns_hostnames = true
 
   tags = {
-    Name        = "terraform-platform-dev-vpc"
-    Envrionment = "dev"
+    Name        = "terraform-platform-${var.environment}-vpc"
+    Environment = "${var.environment}"
     ManagedBy   = "Terraform"
   }
 }
-
 
 # ---------------------------------------------------------
 # Availability Zones
@@ -55,7 +41,7 @@ resource "aws_subnet" "public_a" {
   map_public_ip_on_launch = true
 
   tags = {
-    Name        = "terraform-platform-dev-public-a"
+    Name        = "terraform-platform-${var.environment}-public-a"
     Environment = var.environment
     Type        = "public"
     ManagedBy   = "Terraform"
@@ -69,7 +55,7 @@ resource "aws_subnet" "public_b" {
   map_public_ip_on_launch = true
 
   tags = {
-    Name        = "terraform-platform-dev-public-b"
+    Name        = "terraform-platform-${var.environment}-public-b"
     Environment = var.environment
     Type        = "public"
     ManagedBy   = "Terraform"
@@ -87,7 +73,7 @@ resource "aws_subnet" "private_app_a" {
   availability_zone = data.aws_availability_zones.available.names[0]
 
   tags = {
-    Name        = "terraform-platform-dev-private-app-a"
+    Name        = "terraform-platform-${var.environment}-private-app-a"
     Environment = var.environment
     Type        = "private-app"
     ManagedBy   = "Terraform"
@@ -100,7 +86,7 @@ resource "aws_subnet" "private_app_b" {
   availability_zone = data.aws_availability_zones.available.names[1]
 
   tags = {
-    Name        = "terraform-platform-dev-private-app-b"
+    Name        = "terraform-platform-${var.environment}-private-app-b"
     Environment = var.environment
     Type        = "private-app"
     ManagedBy   = "Terraform"
@@ -118,7 +104,7 @@ resource "aws_subnet" "private_db_a" {
   availability_zone = data.aws_availability_zones.available.names[0]
 
   tags = {
-    Name        = "terraform-platform-dev-private-db-a"
+    Name        = "terraform-platform-${var.environment}-private-db-a"
     Environment = var.environment
     Type        = "private-db"
     ManagedBy   = "Terraform"
@@ -131,7 +117,7 @@ resource "aws_subnet" "private_db_b" {
   availability_zone = data.aws_availability_zones.available.names[1]
 
   tags = {
-    Name        = "terraform-platform-dev-private-db-b"
+    Name        = "terraform-platform-${var.environment}-private-db-b"
     Environment = var.environment
     Type        = "private-db"
     ManagedBy   = "Terraform"
@@ -147,7 +133,7 @@ resource "aws_internet_gateway" "main" {
   vpc_id = aws_vpc.main.id
 
   tags = {
-    Name        = "terraform-platform-dev-igw"
+    Name        = "terraform-platform-${var.environment}-igw"
     Environment = var.environment
     ManagedBy   = "Terraform"
   }
@@ -162,7 +148,7 @@ resource "aws_eip" "nat_a" {
   domain = "vpc"
 
   tags = {
-    Name        = "terraform-platform-dev-nat-eip-a"
+    Name        = "terraform-platform-${var.environment}-nat-eip-a"
     Environment = var.environment
     ManagedBy   = "Terraform"
   }
@@ -172,7 +158,7 @@ resource "aws_eip" "nat_b" {
   domain = "vpc"
 
   tags = {
-    Name        = "terraform-platform-dev-nat-eip-b"
+    Name        = "terraform-platform-${var.environment}-nat-eip-b"
     Environment = var.environment
     ManagedBy   = "Terraform"
   }
@@ -190,7 +176,7 @@ resource "aws_nat_gateway" "a" {
   depends_on = [aws_internet_gateway.main]
 
   tags = {
-    Name        = "terraform-platform-dev-nat-a"
+    Name        = "terraform-platform-${var.environment}-nat-a"
     Environment = var.environment
     ManagedBy   = "Terraform"
   }
@@ -203,7 +189,7 @@ resource "aws_nat_gateway" "b" {
   depends_on = [aws_internet_gateway.main]
 
   tags = {
-    Name        = "terraform-platform-dev-nat-b"
+    Name        = "terraform-platform-${var.environment}-nat-b"
     Environment = var.environment
     ManagedBy   = "Terraform"
   }
@@ -218,7 +204,7 @@ resource "aws_route_table" "public" {
   vpc_id = aws_vpc.main.id
 
   tags = {
-    Name        = "terraform-platform-dev-public-rt"
+    Name        = "terraform-platform-${var.environment}-public-rt"
     Environment = var.environment
     ManagedBy   = "Terraform"
   }
@@ -239,7 +225,7 @@ resource "aws_route_table" "private_app_a" {
   vpc_id = aws_vpc.main.id
 
   tags = {
-    Name        = "terraform-platform-dev-private-app-a-rt"
+    Name        = "terraform-platform-${var.environment}-private-app-a-rt"
     Environment = var.environment
     ManagedBy   = "Terraform"
   }
@@ -249,7 +235,7 @@ resource "aws_route_table" "private_app_b" {
   vpc_id = aws_vpc.main.id
 
   tags = {
-    Name        = "terraform-platform-dev-private-app-b-rt"
+    Name        = "terraform-platform-${var.environment}-private-app-b-rt"
     Environment = var.environment
     ManagedBy   = "Terraform"
   }
@@ -276,7 +262,7 @@ resource "aws_route_table" "private_db" {
   vpc_id = aws_vpc.main.id
 
   tags = {
-    Name        = "terraform-platform-dev-private-db-rt"
+    Name        = "terraform-platform-${var.environment}-private-db-rt"
     Environment = var.environment
     ManagedBy   = "Terraform"
   }

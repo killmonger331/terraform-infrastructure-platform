@@ -3,15 +3,12 @@
 # ---------------------------------------------------------
 
 resource "aws_db_subnet_group" "main" {
-  name = "terraform-platform-dev-db-subnet-group"
+  name = "terraform-platform-${var.environment}-db-subnet-group"
 
-  subnet_ids = [
-    aws_subnet.private_db_a.id,
-    aws_subnet.private_db_b.id
-  ]
+  subnet_ids = var.private_db_subnet_ids
 
   tags = {
-    Name        = "terraform-platform-dev-db-subnet-group"
+    Name        = "terraform-platform-${var.environment}-db-subnet-group"
     Environment = var.environment
     ManagedBy   = "Terraform"
   }
@@ -23,7 +20,7 @@ resource "aws_db_subnet_group" "main" {
 # ---------------------------------------------------------
 
 resource "aws_db_instance" "main" {
-  identifier = "terraform-platform-dev-db"
+  identifier = "terraform-platform-${var.environment}-db"
 
   engine         = "mysql"
   instance_class = "db.t3.micro"
@@ -41,7 +38,7 @@ resource "aws_db_instance" "main" {
   db_subnet_group_name = aws_db_subnet_group.main.name
 
   vpc_security_group_ids = [
-    aws_security_group.rds.id
+    var.rds_security_group_id
   ]
 
   multi_az            = true
@@ -53,7 +50,7 @@ resource "aws_db_instance" "main" {
   deletion_protection = false
 
   tags = {
-    Name        = "terraform-platform-dev-db"
+    Name        = "terraform-platform-${var.environment}-db"
     Environment = var.environment
     ManagedBy   = "Terraform"
   }

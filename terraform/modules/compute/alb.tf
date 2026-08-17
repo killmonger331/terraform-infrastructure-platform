@@ -3,23 +3,20 @@
 # ---------------------------------------------------------
 
 resource "aws_lb" "app" {
-  name               = "terraform-platform-dev-alb"
+  name               = "terraform-platform-${var.environment}-alb"
   internal           = false
   load_balancer_type = "application"
 
   security_groups = [
-    aws_security_group.alb.id
+    var.alb_security_group_id
   ]
 
-  subnets = [
-    aws_subnet.public_a.id,
-    aws_subnet.public_b.id
-  ]
+  subnets = var.public_subnet_ids
 
   enable_deletion_protection = false
 
   tags = {
-    Name        = "terraform-platform-dev-alb"
+    Name        = "terraform-platform-${var.environment}-alb"
     Environment = var.environment
     ManagedBy   = "Terraform"
   }
@@ -31,10 +28,10 @@ resource "aws_lb" "app" {
 # ---------------------------------------------------------
 
 resource "aws_lb_target_group" "app" {
-  name     = "terraform-platform-dev-tg"
+  name     = "terraform-platform-${var.environment}-tg"
   port     = 80
   protocol = "HTTP"
-  vpc_id   = aws_vpc.main.id
+  vpc_id   = var.vpc_id
 
   target_type = "instance"
 
@@ -51,7 +48,7 @@ resource "aws_lb_target_group" "app" {
   }
 
   tags = {
-    Name        = "terraform-platform-dev-tg"
+    Name        = "terraform-platform-${var.environment}-tg"
     Environment = var.environment
     ManagedBy   = "Terraform"
   }
@@ -74,7 +71,7 @@ resource "aws_lb_listener" "http" {
   }
 
   tags = {
-    Name        = "terraform-platform-dev-http-listener"
+    Name        = "terraform-platform-${var.environment}-http-listener"
     Environment = var.environment
     ManagedBy   = "Terraform"
   }
