@@ -1,0 +1,787 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  >
+
+  <meta
+    name="description"
+    content="Terraform Infrastructure Platform - Multi-environment AWS infrastructure deployed with Terraform."
+  >
+
+  <title>Terraform Infrastructure Platform</title>
+
+  <link rel="stylesheet" href="./css/styles.css">
+</head>
+
+<body>
+
+  <!-- =====================================================
+       Navigation
+  ====================================================== -->
+
+  <header class="site-header">
+    <div class="nav-container">
+
+      <a href="#top" class="brand">
+        <div class="brand-mark">TF</div>
+
+        <div>
+          <span class="brand-title">
+            Terraform Infrastructure Platform
+          </span>
+
+          <span class="brand-subtitle">
+            AWS Infrastructure as Code
+          </span>
+        </div>
+      </a>
+
+      <nav class="nav-links">
+        <a href="#architecture">Architecture</a>
+        <a href="#infrastructure">Infrastructure</a>
+        <a href="#cicd">CI/CD</a>
+        <a href="#security">Security</a>
+      </nav>
+
+    </div>
+  </header>
+
+
+  <main id="top">
+
+    <!-- =====================================================
+         Hero
+    ====================================================== -->
+
+    <section class="hero">
+      <div class="container hero-grid">
+
+        <div class="hero-content">
+
+          <div class="eyebrow">
+            TERRAFORM • AWS • CI/CD
+          </div>
+
+          <h1>
+            Production-style AWS infrastructure,
+            built entirely with Terraform.
+          </h1>
+
+          <p class="hero-description">
+            A reusable multi-environment infrastructure platform
+            built across two Availability Zones with load balancing,
+            Auto Scaling, private application servers, Multi-AZ RDS,
+            CloudWatch monitoring, remote Terraform state, and
+            GitHub Actions CI/CD.
+          </p>
+
+          <div class="hero-actions">
+            <a href="#architecture" class="button button-primary">
+              View Architecture
+            </a>
+
+            <a
+              href="https://github.com/killmonger331/terraform-infrastructure-platform"
+              class="button button-secondary"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              View GitHub
+            </a>
+          </div>
+
+        </div>
+
+
+        <!-- Environment summary -->
+
+        <div class="environment-panel">
+
+          <div class="panel-heading">
+            <div>
+              <span class="panel-label">
+                ACTIVE VIEW
+              </span>
+
+              <h2 id="environmentName">
+                Development
+              </h2>
+            </div>
+
+            <span class="status-badge">
+              ● Healthy
+            </span>
+          </div>
+
+
+          <div class="environment-toggle">
+
+            <button
+              id="devButton"
+              class="environment-button active"
+              data-environment="dev"
+            >
+              DEV
+            </button>
+
+            <button
+              id="prodButton"
+              class="environment-button"
+              data-environment="prod"
+            >
+              PROD
+            </button>
+
+          </div>
+
+
+          <div class="environment-details">
+
+            <div class="detail-row">
+              <span>Region</span>
+              <strong>us-east-1</strong>
+            </div>
+
+            <div class="detail-row">
+              <span>VPC CIDR</span>
+              <strong id="vpcCidr">
+                10.0.0.0/16
+              </strong>
+            </div>
+
+            <div class="detail-row">
+              <span>EC2 Type</span>
+              <strong id="instanceType">
+                t3.micro
+              </strong>
+            </div>
+
+            <div class="detail-row">
+              <span>ASG Capacity</span>
+              <strong id="asgCapacity">
+                2 / 2 / 4
+              </strong>
+            </div>
+
+            <div class="detail-row">
+              <span>Terraform State</span>
+              <strong id="statePath">
+                environments/dev/terraform.tfstate
+              </strong>
+            </div>
+
+          </div>
+
+        </div>
+
+      </div>
+    </section>
+
+
+    <!-- =====================================================
+         Highlights
+    ====================================================== -->
+
+    <section class="highlights">
+      <div class="container highlight-grid">
+
+        <article class="highlight-card">
+          <span class="highlight-number">2</span>
+          <span class="highlight-title">Availability Zones</span>
+          <p>
+            Infrastructure distributed across two AZs for
+            high availability.
+          </p>
+        </article>
+
+        <article class="highlight-card">
+          <span class="highlight-number">6</span>
+          <span class="highlight-title">Private / Public Subnets</span>
+          <p>
+            Dedicated public, application, and database network tiers.
+          </p>
+        </article>
+
+        <article class="highlight-card">
+          <span class="highlight-number">2</span>
+          <span class="highlight-title">NAT Gateways</span>
+          <p>
+            Independent outbound connectivity for private app subnets.
+          </p>
+        </article>
+
+        <article class="highlight-card">
+          <span class="highlight-number">100%</span>
+          <span class="highlight-title">Infrastructure as Code</span>
+          <p>
+            AWS infrastructure managed through reusable Terraform modules.
+          </p>
+        </article>
+
+      </div>
+    </section>
+
+
+    <!-- =====================================================
+         Architecture
+    ====================================================== -->
+
+    <section id="architecture" class="section">
+      <div class="container">
+
+        <div class="section-heading">
+          <span class="section-kicker">
+            ARCHITECTURE
+          </span>
+
+          <h2>
+            Multi-tier AWS architecture
+          </h2>
+
+          <p>
+            Internet traffic enters through an Application Load Balancer
+            and is distributed to EC2 instances running in private
+            application subnets across two Availability Zones.
+          </p>
+        </div>
+
+
+        <div class="architecture">
+
+          <div class="architecture-node internet-node">
+            <span class="node-icon">◎</span>
+            <strong>Internet</strong>
+          </div>
+
+          <div class="architecture-arrow">↓</div>
+
+          <div class="architecture-node alb-node">
+            <span class="node-label">PUBLIC ENTRY POINT</span>
+            <strong>Application Load Balancer</strong>
+            <small>Public Subnets A + B</small>
+          </div>
+
+          <div class="architecture-arrow">↓</div>
+
+
+          <div class="az-grid">
+
+            <!-- AZ A -->
+
+            <div class="az-card">
+              <div class="az-heading">
+                Availability Zone A
+              </div>
+
+              <div class="subnet public-subnet">
+                <span>Public Subnet A</span>
+                <strong id="publicSubnetA">
+                  10.0.1.0/24
+                </strong>
+
+                <small>NAT Gateway A</small>
+              </div>
+
+              <div class="subnet app-subnet">
+                <span>Private App Subnet A</span>
+                <strong id="privateAppSubnetA">
+                  10.0.11.0/24
+                </strong>
+
+                <div class="instance">
+                  EC2
+                </div>
+              </div>
+
+              <div class="subnet db-subnet">
+                <span>Private DB Subnet A</span>
+                <strong id="privateDbSubnetA">
+                  10.0.21.0/24
+                </strong>
+              </div>
+            </div>
+
+
+            <!-- AZ B -->
+
+            <div class="az-card">
+              <div class="az-heading">
+                Availability Zone B
+              </div>
+
+              <div class="subnet public-subnet">
+                <span>Public Subnet B</span>
+                <strong id="publicSubnetB">
+                  10.0.2.0/24
+                </strong>
+
+                <small>NAT Gateway B</small>
+              </div>
+
+              <div class="subnet app-subnet">
+                <span>Private App Subnet B</span>
+                <strong id="privateAppSubnetB">
+                  10.0.12.0/24
+                </strong>
+
+                <div class="instance">
+                  EC2
+                </div>
+              </div>
+
+              <div class="subnet db-subnet">
+                <span>Private DB Subnet B</span>
+                <strong id="privateDbSubnetB">
+                  10.0.22.0/24
+                </strong>
+              </div>
+            </div>
+
+          </div>
+
+
+          <div class="architecture-arrow">↓</div>
+
+          <div class="architecture-node rds-node">
+            <span class="node-label">DATABASE TIER</span>
+
+            <strong>
+              Amazon RDS MySQL
+            </strong>
+
+            <small>
+              Multi-AZ • Encrypted • Not Publicly Accessible
+            </small>
+          </div>
+
+        </div>
+
+      </div>
+    </section>
+
+
+    <!-- =====================================================
+         Infrastructure
+    ====================================================== -->
+
+    <section id="infrastructure" class="section section-alt">
+      <div class="container">
+
+        <div class="section-heading">
+          <span class="section-kicker">
+            INFRASTRUCTURE
+          </span>
+
+          <h2>
+            Infrastructure components
+          </h2>
+
+          <p>
+            Each layer is defined through reusable Terraform modules
+            and independently configured by environment.
+          </p>
+        </div>
+
+
+        <div class="feature-grid">
+
+          <article class="feature-card">
+            <div class="feature-icon">NET</div>
+
+            <h3>Networking</h3>
+
+            <p>
+              Custom VPC spanning two Availability Zones with six
+              subnets, Internet Gateway, NAT Gateways, route tables,
+              and tier-specific security groups.
+            </p>
+
+            <ul>
+              <li>2 public subnets</li>
+              <li>2 private app subnets</li>
+              <li>2 private DB subnets</li>
+              <li>2 NAT Gateways</li>
+            </ul>
+          </article>
+
+
+          <article class="feature-card">
+            <div class="feature-icon">EC2</div>
+
+            <h3>Compute</h3>
+
+            <p>
+              Amazon Linux EC2 instances are launched from a reusable
+              launch template and managed through an Auto Scaling Group.
+            </p>
+
+            <ul>
+              <li>Application Load Balancer</li>
+              <li>EC2 Launch Template</li>
+              <li>Multi-AZ Auto Scaling</li>
+              <li>ALB health checks</li>
+            </ul>
+          </article>
+
+
+          <article class="feature-card">
+            <div class="feature-icon">DB</div>
+
+            <h3>Database</h3>
+
+            <p>
+              MySQL runs inside dedicated private database subnets
+              with encrypted storage and Multi-AZ high availability.
+            </p>
+
+            <ul>
+              <li>Amazon RDS MySQL</li>
+              <li>Multi-AZ deployment</li>
+              <li>Private networking</li>
+              <li>AWS-managed credentials</li>
+            </ul>
+          </article>
+
+
+          <article class="feature-card">
+            <div class="feature-icon">OBS</div>
+
+            <h3>Monitoring</h3>
+
+            <p>
+              CloudWatch provides visibility into compute,
+              load-balancer, and database health.
+            </p>
+
+            <ul>
+              <li>EC2 CPU alarms</li>
+              <li>ALB health monitoring</li>
+              <li>RDS CPU monitoring</li>
+              <li>Infrastructure dashboard</li>
+            </ul>
+          </article>
+
+        </div>
+
+      </div>
+    </section>
+
+
+    <!-- =====================================================
+         Traffic Flow
+    ====================================================== -->
+
+    <section class="section">
+      <div class="container">
+
+        <div class="section-heading">
+          <span class="section-kicker">
+            TRAFFIC FLOW
+          </span>
+
+          <h2>
+            Controlled network access
+          </h2>
+        </div>
+
+
+        <div class="traffic-flow">
+
+          <div class="traffic-item">
+            <span>Internet</span>
+            <strong>HTTP :80</strong>
+          </div>
+
+          <div class="traffic-arrow">→</div>
+
+          <div class="traffic-item">
+            <span>ALB</span>
+            <strong>ALB Security Group</strong>
+          </div>
+
+          <div class="traffic-arrow">→</div>
+
+          <div class="traffic-item">
+            <span>EC2</span>
+            <strong>HTTP :80</strong>
+          </div>
+
+          <div class="traffic-arrow">→</div>
+
+          <div class="traffic-item">
+            <span>RDS</span>
+            <strong>MySQL :3306</strong>
+          </div>
+
+        </div>
+
+        <p class="traffic-note">
+          EC2 accepts application traffic only from the ALB security
+          group. RDS accepts database traffic only from the EC2
+          security group.
+        </p>
+
+      </div>
+    </section>
+
+
+    <!-- =====================================================
+         CI/CD
+    ====================================================== -->
+
+    <section id="cicd" class="section section-alt">
+      <div class="container">
+
+        <div class="section-heading">
+          <span class="section-kicker">
+            CI/CD
+          </span>
+
+          <h2>
+            Infrastructure delivery through GitHub Actions
+          </h2>
+
+          <p>
+            Infrastructure changes are validated before merge and
+            deployed using short-lived AWS credentials through OIDC.
+          </p>
+        </div>
+
+
+        <div class="pipeline">
+
+          <div class="pipeline-step">
+            <span>01</span>
+            <strong>Feature Branch</strong>
+            <small>Terraform changes committed</small>
+          </div>
+
+          <div class="pipeline-arrow">→</div>
+
+          <div class="pipeline-step">
+            <span>02</span>
+            <strong>Pull Request</strong>
+            <small>fmt • validate • plan</small>
+          </div>
+
+          <div class="pipeline-arrow">→</div>
+
+          <div class="pipeline-step">
+            <span>03</span>
+            <strong>Merge</strong>
+            <small>main branch</small>
+          </div>
+
+          <div class="pipeline-arrow">→</div>
+
+          <div class="pipeline-step">
+            <span>04</span>
+            <strong>Deploy Dev</strong>
+            <small>Automatic apply</small>
+          </div>
+
+          <div class="pipeline-arrow">→</div>
+
+          <div class="pipeline-step">
+            <span>05</span>
+            <strong>Approve Prod</strong>
+            <small>Manual gate</small>
+          </div>
+
+          <div class="pipeline-arrow">→</div>
+
+          <div class="pipeline-step">
+            <span>06</span>
+            <strong>Deploy Prod</strong>
+            <small>Terraform apply</small>
+          </div>
+
+        </div>
+
+      </div>
+    </section>
+
+
+    <!-- =====================================================
+         Security
+    ====================================================== -->
+
+    <section id="security" class="section">
+      <div class="container">
+
+        <div class="section-heading">
+          <span class="section-kicker">
+            SECURITY
+          </span>
+
+          <h2>
+            Security by architecture
+          </h2>
+        </div>
+
+
+        <div class="security-grid">
+
+          <article class="security-card">
+            <h3>Private Compute</h3>
+
+            <p>
+              Application EC2 instances run without public IP addresses
+              inside private subnets.
+            </p>
+          </article>
+
+          <article class="security-card">
+            <h3>Private Database</h3>
+
+            <p>
+              RDS is not publicly accessible and accepts MySQL traffic
+              only from the application security group.
+            </p>
+          </article>
+
+          <article class="security-card">
+            <h3>OIDC Authentication</h3>
+
+            <p>
+              GitHub Actions assumes an AWS IAM role through OIDC rather
+              than storing long-lived AWS access keys.
+            </p>
+          </article>
+
+          <article class="security-card">
+            <h3>Protected State</h3>
+
+            <p>
+              Terraform state is encrypted in S3 with versioning,
+              public-access blocking, and state locking.
+            </p>
+          </article>
+
+        </div>
+
+      </div>
+    </section>
+
+
+    <!-- =====================================================
+         Terraform Modules
+    ====================================================== -->
+
+    <section class="section section-alt">
+      <div class="container">
+
+        <div class="section-heading">
+          <span class="section-kicker">
+            TERRAFORM DESIGN
+          </span>
+
+          <h2>
+            Reusable module architecture
+          </h2>
+
+          <p>
+            Development and production use the same Terraform modules
+            while maintaining separate configuration and remote state.
+          </p>
+        </div>
+
+
+        <div class="modules">
+
+          <div class="module-card">
+            <span>module</span>
+            <strong>networking</strong>
+          </div>
+
+          <div class="module-card">
+            <span>module</span>
+            <strong>compute</strong>
+          </div>
+
+          <div class="module-card">
+            <span>module</span>
+            <strong>database</strong>
+          </div>
+
+          <div class="module-card">
+            <span>module</span>
+            <strong>monitoring</strong>
+          </div>
+
+        </div>
+
+
+        <div class="environment-state-grid">
+
+          <div class="state-card">
+            <span>DEV</span>
+
+            <strong>
+              environments/dev
+            </strong>
+
+            <small>
+              S3 state:
+              environments/dev/terraform.tfstate
+            </small>
+          </div>
+
+          <div class="state-card">
+            <span>PROD</span>
+
+            <strong>
+              environments/prod
+            </strong>
+
+            <small>
+              S3 state:
+              environments/prod/terraform.tfstate
+            </small>
+          </div>
+
+        </div>
+
+      </div>
+    </section>
+
+  </main>
+
+
+  <!-- =====================================================
+       Footer
+  ====================================================== -->
+
+  <footer class="footer">
+    <div class="container footer-content">
+
+      <div>
+        <strong>
+          Terraform Infrastructure Platform
+        </strong>
+
+        <p>
+          AWS infrastructure built and managed with Terraform.
+        </p>
+      </div>
+
+      <div class="footer-tags">
+        <span>Terraform</span>
+        <span>AWS</span>
+        <span>GitHub Actions</span>
+        <span>Infrastructure as Code</span>
+      </div>
+
+    </div>
+  </footer>
+
+
+  <script src="./js/main.js"></script>
+
+</body>
+</html>
