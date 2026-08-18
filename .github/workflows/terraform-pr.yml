@@ -1,0 +1,75 @@
+name: Terraform PR Checks
+
+on:
+  pull_request:
+    branches:
+      - main
+
+permissions:
+  contents: read
+  id-token: write
+
+jobs:
+  dev-plan:
+    name: Dev - Format Validate Plan
+    runs-on: ubuntu-latest
+
+    defaults:
+      run:
+        working-directory: terraform/environments/dev
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v3
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v6
+        with:
+          role-to-assume: arn:aws:iam::015809853573:role/TerraformPlatformGitHubActionsRole
+          aws-region: us-east-1
+
+      - name: Terraform Init
+        run: terraform init -input=false
+
+      - name: Terraform Format
+        run: terraform fmt -check -recursive ../..
+
+      - name: Terraform Validate
+        run: terraform validate
+
+      - name: Terraform Plan
+        run: terraform plan -input=false -no-color
+
+
+  prod-plan:
+    name: Prod - Format Validate Plan
+    runs-on: ubuntu-latest
+
+    defaults:
+      run:
+        working-directory: terraform/environments/prod
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v3
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v6
+        with:
+          role-to-assume: arn:aws:iam::015809853573:role/TerraformPlatformGitHubActionsRole
+          aws-region: us-east-1
+
+      - name: Terraform Init
+        run: terraform init -input=false
+
+      - name: Terraform Validate
+        run: terraform validate
+
+      - name: Terraform Plan
+        run: terraform plan -input=false -no-color

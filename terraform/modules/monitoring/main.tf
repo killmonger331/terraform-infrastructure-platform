@@ -167,7 +167,7 @@ resource "aws_cloudwatch_metric_alarm" "rds_low_storage" {
 # ---------------------------------------------------------
 
 resource "aws_cloudwatch_dashboard" "main" {
-  dashboard_name = "terraform-platform-dev-dashboard"
+  dashboard_name = "terraform-platform-${var.environment}-dashboard"
 
   dashboard_body = jsonencode({
     widgets = [
