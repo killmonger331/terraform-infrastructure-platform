@@ -89,38 +89,13 @@ data "aws_iam_policy_document" "github_actions_trust" {
       variable = "token.actions.githubusercontent.com:sub"
 
       values = [
-        "repo:killmonger331/terraform-infrastructure-platform:pull_request",
-        "repo:killmonger331/terraform-infrastructure-platform:environment:dev",
-        "repo:killmonger331/terraform-infrastructure-platform:environment:prod"
+        "repo:killmonger331@182454420/terraform-infrastructure-platform@1335440601:pull_request",
+        "repo:killmonger331@182454420/terraform-infrastructure-platform@1335440601:environment:dev",
+        "repo:killmonger331@182454420/terraform-infrastructure-platform@1335440601:environment:prod"
       ]
     }
   }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 resource "aws_iam_role" "github_terraform" {
   name = "TerraformPlatformGitHubActionsRole"
