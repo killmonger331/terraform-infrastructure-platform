@@ -76,10 +76,10 @@ data "aws_iam_policy_document" "github_actions_trust" {
 
     condition {
       test     = "StringEquals"
-      variable = "token.actions.githubusercontent.com:aud"
+      variable = "token.actions.githubusercontent.com:sub"
 
       values = [
-        "sts.amazonaws.com"
+        "repo:killmonger331/terraform-infrastructure-platform:pull_request"
       ]
     }
 
