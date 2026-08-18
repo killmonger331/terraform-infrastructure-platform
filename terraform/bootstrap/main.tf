@@ -58,6 +58,7 @@ resource "aws_iam_openid_connect_provider" "github" {
   ]
 }
 
+
 data "aws_iam_policy_document" "github_actions_trust" {
   statement {
     effect = "Allow"
@@ -76,23 +77,50 @@ data "aws_iam_policy_document" "github_actions_trust" {
 
     condition {
       test     = "StringEquals"
-      variable = "token.actions.githubusercontent.com:sub"
+      variable = "token.actions.githubusercontent.com:aud"
 
       values = [
-        "repo:killmonger331/terraform-infrastructure-platform:pull_request"
+        "sts.amazonaws.com"
       ]
     }
 
     condition {
-      test     = "StringLike"
+      test     = "StringEquals"
       variable = "token.actions.githubusercontent.com:sub"
 
       values = [
-        "repo:killmonger331/terraform-infrastructure-platform:*"
+        "repo:killmonger331/terraform-infrastructure-platform:pull_request",
+        "repo:killmonger331/terraform-infrastructure-platform:environment:dev",
+        "repo:killmonger331/terraform-infrastructure-platform:environment:prod"
       ]
     }
   }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 resource "aws_iam_role" "github_terraform" {
   name = "TerraformPlatformGitHubActionsRole"
