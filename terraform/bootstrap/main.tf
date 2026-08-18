@@ -125,7 +125,13 @@ resource "aws_iam_role_policy" "github_terraform" {
           "autoscaling:*",
           "rds:*",
           "cloudwatch:*",
-          "secretsmanager:*"
+          "secretsmanager:*",
+          "kms:CreateGrant",
+          "kms:DescribeKey",
+          "kms:Encrypt",
+          "kms:Decrypt",
+          "kms:GenerateDataKey",
+          "kms:GenerateDataKeyWithoutPlaintext"
         ]
 
         Resource = "*"
