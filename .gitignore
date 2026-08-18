@@ -8,6 +8,10 @@
 *.tfvars
 *.tfvars.json
 
+# Allow non-secret environment configuration
+!terraform/environments/dev/terraform.tfvars
+!terraform/environments/prod/terraform.tfvars
+
 # Crash logs
 crash.log
 crash.*.log

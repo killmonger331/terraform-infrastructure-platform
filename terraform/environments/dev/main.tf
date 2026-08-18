@@ -1,9 +1,3 @@
-module "networking" {
-  source = "../../modules/networking"
-
-  environment = var.environment
-}
-
 module "compute" {
   source = "../../modules/compute"
 
@@ -17,10 +11,10 @@ module "compute" {
   alb_security_group_id = module.networking.alb_security_group_id
   ec2_security_group_id = module.networking.ec2_security_group_id
 
-  instance_type    = "t3.micro"
-  min_size         = 2
-  desired_capacity = 2
-  max_size         = 4
+  instance_type    = var.instance_type
+  min_size         = var.asg_min_size
+  desired_capacity = var.asg_desired_capacity
+  max_size         = var.asg_max_size
 }
 
 module "database" {
@@ -43,4 +37,18 @@ module "monitoring" {
   target_group_arn_suffix = module.compute.target_group_arn_suffix
 
   db_instance_identifier = module.database.db_instance_identifier
+}
+
+module "networking" {
+  source = "../../modules/networking"
+
+  environment = var.environment
+  vpc_cidr    = var.vpc_cidr
+
+  public_subnet_a_cidr      = var.public_subnet_a_cidr
+  public_subnet_b_cidr      = var.public_subnet_b_cidr
+  private_app_subnet_a_cidr = var.private_app_subnet_a_cidr
+  private_app_subnet_b_cidr = var.private_app_subnet_b_cidr
+  private_db_subnet_a_cidr  = var.private_db_subnet_a_cidr
+  private_db_subnet_b_cidr  = var.private_db_subnet_b_cidr
 }

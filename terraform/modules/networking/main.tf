@@ -11,7 +11,7 @@
 
 
 resource "aws_vpc" "main" {
-  cidr_block           = "10.0.0.0/16"
+  cidr_block           = var.vpc_cidr
   enable_dns_support   = true
   enable_dns_hostnames = true
 
@@ -36,7 +36,7 @@ data "aws_availability_zones" "available" {
 
 resource "aws_subnet" "public_a" {
   vpc_id                  = aws_vpc.main.id
-  cidr_block              = "10.0.1.0/24"
+  cidr_block              = var.public_subnet_a_cidr
   availability_zone       = data.aws_availability_zones.available.names[0]
   map_public_ip_on_launch = true
 
@@ -50,7 +50,7 @@ resource "aws_subnet" "public_a" {
 
 resource "aws_subnet" "public_b" {
   vpc_id                  = aws_vpc.main.id
-  cidr_block              = "10.0.2.0/24"
+  cidr_block              = var.public_subnet_b_cidr
   availability_zone       = data.aws_availability_zones.available.names[1]
   map_public_ip_on_launch = true
 
@@ -69,7 +69,7 @@ resource "aws_subnet" "public_b" {
 
 resource "aws_subnet" "private_app_a" {
   vpc_id            = aws_vpc.main.id
-  cidr_block        = "10.0.11.0/24"
+  cidr_block        = var.private_app_subnet_a_cidr
   availability_zone = data.aws_availability_zones.available.names[0]
 
   tags = {
@@ -82,7 +82,7 @@ resource "aws_subnet" "private_app_a" {
 
 resource "aws_subnet" "private_app_b" {
   vpc_id            = aws_vpc.main.id
-  cidr_block        = "10.0.12.0/24"
+  cidr_block        = var.private_app_subnet_b_cidr
   availability_zone = data.aws_availability_zones.available.names[1]
 
   tags = {
@@ -100,7 +100,7 @@ resource "aws_subnet" "private_app_b" {
 
 resource "aws_subnet" "private_db_a" {
   vpc_id            = aws_vpc.main.id
-  cidr_block        = "10.0.21.0/24"
+  cidr_block        = var.private_db_subnet_a_cidr
   availability_zone = data.aws_availability_zones.available.names[0]
 
   tags = {
@@ -113,7 +113,7 @@ resource "aws_subnet" "private_db_a" {
 
 resource "aws_subnet" "private_db_b" {
   vpc_id            = aws_vpc.main.id
-  cidr_block        = "10.0.22.0/24"
+  cidr_block        = var.private_db_subnet_b_cidr
   availability_zone = data.aws_availability_zones.available.names[1]
 
   tags = {
