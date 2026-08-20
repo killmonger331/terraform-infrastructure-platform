@@ -89,9 +89,9 @@ data "aws_iam_policy_document" "github_actions_trust" {
       variable = "token.actions.githubusercontent.com:sub"
 
       values = [
-        "repo:killmonger331@182454420/terraform-infrastructure-platform@1335440601:pull_request",
-        "repo:killmonger331@182454420/terraform-infrastructure-platform@1335440601:environment:dev",
-        "repo:killmonger331@182454420/terraform-infrastructure-platform@1335440601:environment:prod"
+        "repo:richardmorales27@182454420/terraform-infrastructure-platform@1335440601:pull_request",
+        "repo:richardmorales27@182454420/terraform-infrastructure-platform@1335440601:environment:dev",
+        "repo:richardmorales27@182454420/terraform-infrastructure-platform@1335440601:environment:prod"
       ]
     }
   }
